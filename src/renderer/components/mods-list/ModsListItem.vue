@@ -10,7 +10,16 @@
         tile
         style="margin-top: 0px; margin-bottom: 0px; margin-right: 8px; height: 45px; width: 45px;"
       >
-        <img :src="icon">
+        <img
+          v-if="!mod.isCached || !isOffline"
+          :src="icon"
+        >
+        <v-icon
+          v-else
+          style="font-size: 45px !important"
+        >
+          mdi-image-off-outline
+        </v-icon>
       </v-list-item-avatar>
       <v-list-item-content
         style="cursor: pointer; user-select: none; padding: 0;"
@@ -31,7 +40,8 @@
               {{ mod.name }}
             </v-list-item-title>
           </template>
-          <span v-if="errorTooltip">{{ errorTooltip }}</span>
+          <span v-if="errorTooltip && isOffline">You are currently offline.<br>A connection to ficsit.app is required to view details and install new mods.</span>
+          <span v-else-if="errorTooltip">{{ errorTooltip }}</span>
           <span v-if="disabled">This mod is disabled. Press the pause icon to enable it.</span>
         </v-tooltip>
         <v-list-item-subtitle v-if="!isModInProgress">
@@ -177,6 +187,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    isOffline: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {
@@ -198,7 +212,7 @@ export default {
       return this.expandedModId === this.mod.mod_reference;
     },
     icon() {
-      return this.mod.logo || 'https://ficsit.app/static/assets/images/no_image.png';
+      return this.mod.logo || 'https://ficsit.app/images/no_image.webp';
     },
     isModInProgress() {
       return !!this.modProgress;
@@ -286,7 +300,9 @@ export default {
   },
   methods: {
     expandClicked() {
-      this.$store.dispatch('expandMod', this.mod.mod_reference);
+      if (!this.isOffline) {
+        this.$store.dispatch('expandMod', this.mod.mod_reference);
+      }
     },
     favoriteClicked() {
       this.$store.dispatch('toggleModFavorite', this.mod.mod_reference);

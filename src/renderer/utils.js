@@ -1,4 +1,4 @@
-import marked from 'marked';
+import { marked } from 'marked';
 import sanitizeHtml from 'sanitize-html';
 import originalFilenamify from 'filenamify';
 import {
@@ -14,7 +14,7 @@ export function lastElement(arr) {
 
 export function markdownAsElement(markdown) {
   const html = sanitizeHtml(marked(markdown), {
-    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'video', 'details', 'summary', 'source', 'strike', 'blockquote']),
+    allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'video', 'details', 'summary', 'source', 'strike', 'blockquote', 'del', 'ins', 's']),
     allowedAttributes: Object.assign(sanitizeHtml.defaults.allowedAttributes, { img: ['src', 'width', 'height'], video: ['src', 'width', 'height', 'controls'], source: ['src', 'type'] }),
   });
   const el = document.createElement('html');

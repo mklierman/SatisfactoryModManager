@@ -559,7 +559,7 @@
 
 <script>
 import {
-  clearCache, getLogFilePath, setDebug, validAndGreater, setTimeoutEnabled,
+  clearCache, getLogFilePath, validAndGreater, setTimeoutEnabled,
 } from 'satisfactory-mod-manager-api';
 import JSZip from 'jszip';
 import fs from 'fs';
@@ -571,6 +571,9 @@ import { satisfies } from 'semver';
 import { mapState } from 'vuex';
 import { filenameFriendlyDate, filenamify, validAndEq } from '@/utils';
 import { getSetting, saveSetting } from '~/settings';
+import { setDebug } from '@/logging';
+
+const { clipboard } = require('electron');
 
 const { clipboard } = require('electron');
 
